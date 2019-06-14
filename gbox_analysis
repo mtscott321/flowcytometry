@@ -1,0 +1,71 @@
+for file in os.listdir(dir_path):
+    if '.fcs' in file and 'Well_' not in file:
+        file_path = dir_path + '/' + file
+        rename_file_path = dir_path + '/' + 'Well_' + file
+        os.rename(file_path, rename_file_path)
+        print('{} was changed to Well_{}'.format(file, file))
+        
+plate = FCPlate.from_dir(ID='Test Plate', path=dir_path, parser='name')
+plate = plate.dropna()
+print(plate)
+
+#Enter a plan ID, get a list of operations.
+ops = plan.operations
+yd_op = list(filter(lambda x: x.id == op_id and x.status == 'done', ops))[0]
+wells = list(filter(lambda x: x.key == 'plate_metadata', yd_op.data_associations))[0] #NOT sure what to do here. Need to get the metadata associations. Maybe make them one massive data association?
+well_hash = wells.object
+mtd = well_hash['plate_metadata'] #metadata dictionarymt
+
+tplate = plate.transform('hlog', channels=['FSC-A', 'SSC-A'])
+
+figure(figsize=(20,10));
+title('FSC vs SSC - {}'.format(plate.ID))
+tplate.plot(['FSC-A','SSC-A'], bins=100, wspace=0.2, hspace=0.2, alpha=0.9);
+
+tplate = plate.transform('hlog', channels=['FL1-A'])
+figure(figsize=(20,10));
+tplate.plot(['FL1-A'], xlim=(0,10000),bins = 100, color = 'green')
+
+# os.chdir('Users⁩/Orlando⁩/⁨Documents⁩/⁨Python_scripts⁩/JA⁩')
+
+with open('PlateLayout_061319.csv') as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+    for row in csv_reader:
+        for well in plate:
+            if str(row[0]) in str(plate[well]):
+                plate[well].meta["Well ID"] = row[0]
+                plate[well].meta["Inducer"] = row[1]
+                plate[well].meta["Inducer_conc"] = row[2] 
+                plate[well].meta["Sample ID"] = row[3] 
+# for well in plate:
+#     print(str(plate[well]))
+
+sample_ids = []
+sample_names = []
+medians = []
+be_concs = []
+wells = []
+
+for well in plate:
+    sample_id = plate[well].meta["Sample ID"]
+    sample_ids.append(sample_id)
+    sample_name = prod.Sample.find(sample_id)
+    sample_names.append(sample_name.name)
+    medians.append(plate[well]['FL1-A'].median())
+    be_concs.append(plate[well].meta["Inducer_conc"])
+    wells.append(plate[well].meta["Well ID"])
+
+d = {'Well ID': wells, 'Sample ID': sample_ids,'Sample Name': sample_names, "Median FL1-A": medians, "Beta-estradiol Conc": be_concs}
+df = pd.DataFrame(d)
+print(df)
+# data_output.to_csv(
+# path_or_buf = 'output_CSV_060319.csv',index=False)
+
+
+#Print by strain
+uniq_sample_ids = np.unique(sample_ids)
+for id in uniq_sample_ids:
+    sample_name = prod.Sample.find(id).name
+    strain_df = df.loc[df['Sample ID'] == id]
+    print(strain_df)
+    strain_df.plot.line(x= 'Beta-estradiol Conc', y='Median FL1-A', title = sample_name)
