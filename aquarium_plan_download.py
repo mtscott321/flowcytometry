@@ -1,5 +1,5 @@
-aq_username = "maddyscott"
-aq_password = "Quix0tic-armadi11o"
+aq_username = 
+aq_password = 
 aq_url = "http://52.27.43.242/" #Leave as is for UW BIOFAB server. 
 plan_id = 33668 
 job_id = 100065 
