@@ -4,6 +4,8 @@ channels:
 dependencies:
     - pandas
     - tqdm
+    - pip
+    - matplotlib=2.2.4
     - pip:
         - FlowCytometryTools
         - pprintpp
