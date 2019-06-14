@@ -4,7 +4,7 @@ channels:
 dependencies:
     - pandas
     - tqdm
-    - pip
+    - pip:
         - FlowCytometryTools
         - pprintpp
         - pydent
