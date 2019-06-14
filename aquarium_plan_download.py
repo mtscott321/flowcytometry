@@ -1,9 +1,9 @@
 aq_username = 
 aq_password = 
 aq_url = "http://52.27.43.242/" #Leave as is for UW BIOFAB server. 
-plan_id = 33668 
-job_id = 100065 
-op_id = 195471 #Find this from Aquarium. Open your plan, open the Job and find the list of operations on the left hand side. 
+plan_id = 34045 
+job_id = 101113 
+op_id = 201958 #Find this from Aquarium. Open your plan, open the Job and find the list of operations on the left hand side. 
 host_folder = '/Users/Orlando/Documents/Data/SynAgFiles' #Folder that will host a new directory with the data files and figures for this analaysis
 new_folder_name = 'ODL_SynAg_190116' #Name for new directory, which will be a subdirectory of 'host folder'
 
