@@ -1,0 +1,10 @@
+name: flowcytometry
+channels:
+    - conda-forge
+dependencies:
+    - pandas
+    - tqdm
+    - pip
+        - FlowCytometryTools
+        - pprintpp
+        - pydent
